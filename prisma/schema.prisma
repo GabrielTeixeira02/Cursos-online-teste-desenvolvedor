@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Professor {
+  id                BigInt      @id @default(autoincrement())
+  nome              String
+  usuario           String      @unique
+  tipoUsuario       TipoUsuario @default(PROFESSOR)
+  cursosMinistrados Curso[]
+}
+
+model Aluno {
+  id                 BigInt              @id @default(autoincrement())
+  nome               String
+  usuario            String              @unique
+  tipoUsuario        TipoUsuario         @default(ALUNO)
+  cursosMatriculados Curso[]
+  aulasVisualizadas  AulasVisualizadas[]
+  UsuariosCursos     UsuariosCursos[]
+}
+
+enum TipoUsuario {
+  PROFESSOR
+  ALUNO
+}
+
+model Curso {
+  id             BigInt           @id @default(autoincrement())
+  nome           String
+  descricao      String?
+  banner         String?
+  professor      Professor        @relation(fields: [idProfessor], references: [id])
+  idProfessor    BigInt           @map("idProfessor")
+  aulas          Aula[]
+  alunos         Aluno[]
+  UsuariosCursos UsuariosCursos[]
+}
+
+model Aula {
+  id                BigInt              @id @default(autoincrement())
+  tipo              String
+  conteudo          String?
+  arquivo           String?
+  curso             Curso               @relation(fields: [idCurso], references: [id])
+  idCurso           BigInt              @map("idCurso")
+  AulasVisualizadas AulasVisualizadas[]
+}
+
+model UsuariosCursos {
+  status             String
+  aulas_visualizadas BigInt @default(0)
+  aluno              Aluno  @relation(fields: [idAluno], references: [id])
+  curso              Curso  @relation(fields: [idCurso], references: [id])
+  idAluno            BigInt @map("idAluno")
+  idCurso            BigInt @map("idCurso")
+
+  @@id([idAluno, idCurso])
+}
+
+model AulasVisualizadas {
+  visualizada Boolean
+  aluno       Aluno   @relation(fields: [idAluno], references: [id])
+  aula        Aula    @relation(fields: [idAula], references: [id])
+  idAluno     BigInt  @map("idAluno")
+  idAula      BigInt  @map("idAula")
+
+  @@id([idAluno, idAula])
+}
