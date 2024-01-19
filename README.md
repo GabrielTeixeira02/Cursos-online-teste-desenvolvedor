@@ -47,6 +47,8 @@ $ npm run start:prod
 
 ## Test
 
+Para a criação desse projeto foi necessario aprender Prisma e NestJS, por conta disso acabei usando de 3 a 4 dias para aprender ambos os Frameworks. Portanto, acabou faltando tempo para fazer os testes unitários.
+
 ```bash
 # unit tests
 $ npm run test
