@@ -84,7 +84,7 @@ enum StatusCurso {
 }
 
 model AulasVisualizadas {
-  visualizada Boolean
+  visualizada Boolean @default(true)
   aluno       Aluno   @relation(fields: [idAluno], references: [id])
   aula        Aula    @relation(fields: [idAula], references: [id])
   idAluno     BigInt  @map("idAluno")

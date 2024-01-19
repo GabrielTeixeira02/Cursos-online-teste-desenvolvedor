@@ -5,6 +5,7 @@ import { ProfessorOutput } from './model/profesor-output';
 import { IsNotEmpty } from 'class-validator';
 import { UsuarioService } from '../usuario/usuario.service';
 import { UsuarioInput } from '../usuario/model/usuario-input';
+import { TipoUsuario } from '@prisma/client';
 
 @Injectable()
 export class ProfessorService {
@@ -19,7 +20,7 @@ export class ProfessorService {
     }
 
     async create(input: ProfessorInput) {
-        await this.usuarioService.create(new UsuarioInput(input.nomeUsuario));
+        await this.usuarioService.create(new UsuarioInput(input.nomeUsuario, TipoUsuario.PROFESSOR));
         return await this.professorRepository.create(input);
     }
 

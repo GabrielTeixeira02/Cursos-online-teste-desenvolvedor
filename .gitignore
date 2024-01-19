@@ -38,3 +38,4 @@ prisma/migrations/20240119032200_init/migration.sql
 prisma/migrations/20240119043801_init/migration.sql
 prisma/migrations/20240119045951_init/migration.sql
 prisma/migrations/20240119050322_init/migration.sql
+prisma/migrations/20240119125806_init/migration.sql

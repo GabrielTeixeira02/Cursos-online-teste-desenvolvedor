@@ -4,6 +4,7 @@ import { AlunoRepository } from './repository/aluno.repository';
 import { AlunoOutput } from './model/aluno-output';
 import { UsuarioInput } from '../usuario/model/usuario-input';
 import { UsuarioService } from '../usuario/usuario.service';
+import { TipoUsuario } from '@prisma/client';
 
 @Injectable()
 export class AlunoService {
@@ -14,7 +15,7 @@ export class AlunoService {
     ) { }
 
     async create(input: AlunoInput) {
-        await this.usuarioService.create(new UsuarioInput(input.nomeUsuario));
+        await this.usuarioService.create(new UsuarioInput(input.nomeUsuario, TipoUsuario.ALUNO));
         return await this.alunoRepository.create(input);
     }
 

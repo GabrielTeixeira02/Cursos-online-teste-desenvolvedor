@@ -7,6 +7,9 @@ import { AlunoCursoRepository } from './repository/aluno-curso.repository';
 import { AlunoService } from '../aluno/aluno.service';
 import { CursoOutput } from './model/curso-output';
 import { AlunoCursoOutput } from './model/aluno-curso-output';
+import { AulaService } from '../aula/aula.service';
+import { VisualizarAulaService } from 'src/visualizar-aula/visualizar-aula.service';
+import { StatusCurso } from '@prisma/client';
 
 @Injectable()
 export class CursoService {
@@ -14,7 +17,9 @@ export class CursoService {
     constructor(private readonly cursoRepository: CursoRepository,
         private readonly validation: CursoValidation,
         private readonly alunoCursoRepository: AlunoCursoRepository,
-        private readonly alunoService: AlunoService
+        private readonly alunoService: AlunoService,
+        private readonly aulaService: AulaService,
+        private readonly visualizaAula: VisualizarAulaService
     ) { }
 
     async create(input: CursoInput, usuarioAtivo: string) {
@@ -54,8 +59,8 @@ export class CursoService {
         alunoCurso.forEach(a => {
             const nomeAluno = alunos.get(a.idAluno).toString();
             cursoOutput.alunos.push(new AlunoCursoOutput(nomeAluno, a.status.toLocaleLowerCase()));
-            console.log(cursoOutput)
         })
         return cursoOutput;
     }
+
 }

@@ -9,9 +9,11 @@ import { CursoModule } from './cadastro/curso/curso.module';
 import { UsuarioModule } from './cadastro/usuario/usuario.module';
 import { AulaService } from './cadastro/aula/aula.service';
 import { AulaModule } from './cadastro/aula/aula.module';
+import { VisualizarAulaController } from './visualizar-aula/visualizar-aula.controller';
+import { VisualizarAulaModule } from './visualizar-aula/visualizar-aula.module';
 
 @Module({
-  imports: [ProfessorModule, AlunoModule, CursoModule, UsuarioModule, AulaModule],
+  imports: [ProfessorModule, AlunoModule, CursoModule, UsuarioModule, AulaModule, VisualizarAulaModule],
   controllers: [AppController, AlunoController, CursoController],
   providers: [
     AppService,
