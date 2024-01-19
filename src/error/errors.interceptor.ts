@@ -4,7 +4,11 @@ import {
     ExecutionContext,
     BadGatewayException,
     CallHandler,
+    ConflictException,
+    BadRequestException,
+    HttpException,
 } from '@nestjs/common';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -15,9 +19,23 @@ export class ErrorsInterceptor implements NestInterceptor {
             .handle()
             .pipe(
                 catchError(err => {
-                    console.log(err);
-                    throw new BadGatewayException(err.message);
+                    console.error(err);
+                    throw this.getError(err);
                 }),
             );
     }
+
+    private getError(error) {
+        if (error.code === 'P2002') {
+            return new ConflictException('Usuário já existente.');
+        }
+
+        if (error instanceof BadRequestException) {
+            error.message = ((error.getResponse()['message']).toString());
+            return error;
+        }
+
+        return new BadGatewayException(error.message);
+    }
+
 }

@@ -15,9 +15,9 @@ export class ProfessorRepository {
         return await this.prisma.professor.create({ data: input });
     }
 
-    async findByUsuario(usuario: string) {
-        return await this.prisma.professor.findUniqueOrThrow({
-            where: { usuario },
+    async findById(id: bigint) {
+        return await this.prisma.professor.findUnique({
+            where: { id: id },
         })
     }
 

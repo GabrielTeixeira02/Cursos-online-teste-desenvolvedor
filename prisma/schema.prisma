@@ -10,10 +10,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Usuario {
+  id          BigInt       @id @default(autoincrement())
+  nome        String       @unique
+  tipoUsuario TipoUsuario?
+  Professor   Professor[]
+  Aluno       Aluno[]
+}
+
 model Professor {
   id                BigInt      @id @default(autoincrement())
   nome              String
-  usuario           String      @unique
+  usuario           Usuario     @relation(fields: [nomeUsuario], references: [nome])
+  nomeUsuario       String      @unique @map("nomeUsuario")
   tipoUsuario       TipoUsuario @default(PROFESSOR)
   cursosMinistrados Curso[]
 }
@@ -21,7 +30,8 @@ model Professor {
 model Aluno {
   id                 BigInt              @id @default(autoincrement())
   nome               String
-  usuario            String              @unique
+  usuario            Usuario             @relation(fields: [nomeUsuario], references: [nome])
+  nomeUsuario        String              @unique @map("nomeUsuario")
   tipoUsuario        TipoUsuario         @default(ALUNO)
   cursosMatriculados Curso[]
   aulasVisualizadas  AulasVisualizadas[]

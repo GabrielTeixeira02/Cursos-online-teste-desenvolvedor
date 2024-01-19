@@ -8,5 +8,5 @@ export class ProfessorInput {
 
     @IsNotEmpty({ message: 'O usuário não pode ser vazio' })
     @IsString({ message: 'O usuário não pode ser vazio' })
-    usuario: string;
+    nomeUsuario: string;
 }
