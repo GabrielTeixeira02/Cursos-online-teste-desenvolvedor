@@ -45,6 +45,13 @@ export class CursoValidation {
         }
     }
 
+    async validatePermissaoUsuarioAluno(usuarioAtivo: string) {
+        const user = await this.usuarioService.findByNomeUsuario(usuarioAtivo);
+        if (user === null || user.tipoUsuario === TipoUsuario.PROFESSOR) {
+            throw new UnauthorizedException("Somente alunos estão autorizados a fazer essa ação.");
+        }
+    }
+
     private async validateSeCursoExiste(id: bigint, acao: string) {
         if (!(await this.cursoReposiory.findById(id))) {
             throw new NotFoundException(`Não é possível ${acao}, curso com id ${id} não encontrado`);

@@ -45,4 +45,10 @@ export class CursoController {
         return this.cursoService.findAlunosCadastrados(headers['user-token'], idCurso);
     }
 
+    @UseGuards(Auth)
+    @Get('find/cursos-aluno')
+    findCursosByAluno(@Headers() headers) {
+        return this.cursoService.findCursosByAluno(headers['user-token']);
+    }
+
 }

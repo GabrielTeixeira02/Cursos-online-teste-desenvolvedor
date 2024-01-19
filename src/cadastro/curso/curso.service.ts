@@ -78,4 +78,9 @@ export class CursoService {
         }
     }
 
+    async findCursosByAluno(usuarioAtivo: string) {
+        await this.validation.validatePermissaoUsuarioAluno(usuarioAtivo);
+        return await this.cursoRepository.findCursosByAluno(usuarioAtivo);
+    }
+
 }

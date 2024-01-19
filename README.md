@@ -29,6 +29,10 @@
 ## Installation
 
 ```bash
+Node version v20.11.0
+```
+
+```bash
 $ npm install
 ```
 
@@ -139,6 +143,11 @@ Body: {
 Path: http://localhost:{port}/curso/find/alunos-cadastrados/{idCurso}
 Método: GET
 header: Necessário passar um token de nome 'user-token' e o valor é o nome do usuário(Aluno ou Professor) cadastrado.
+
+# Listar cursos em que um aluno está cadastrado
+Path: http://localhost:{port}/curso/find/cursos-aluno
+Método: GET
+header: Não necessário, o aluno é pego pelo usuário do token.
 ```
 
 ### Aula

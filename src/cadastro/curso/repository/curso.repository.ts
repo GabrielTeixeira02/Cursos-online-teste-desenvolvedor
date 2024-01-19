@@ -57,4 +57,20 @@ export class CursoRepository {
             },
         });
     }
+
+    async findCursosByAluno(userAluno: string) {
+        return await this.prisma.curso.findMany({
+            where: {
+                AlunoCurso: {
+                    some: {
+                        aluno: {
+                            nomeUsuario: {
+                                equals: userAluno
+                            }
+                        },
+                    },
+                },
+            }
+        })
+    }
 }
