@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ProfessorRepository } from './repository/professor-repository';
+import { ProfessorRepository } from './repository/professor.repository';
 import { ProfessorInput } from './model/professor-input';
 import { ProfessorOutput } from './model/profesor-output';
 import { IsNotEmpty } from 'class-validator';

@@ -14,4 +14,17 @@ export class AlunoRepository {
     async create(input: AlunoInput) {
         return await this.prisma.aluno.create({ data: input });
     }
+
+    async findById(id: bigint) {
+        return await this.prisma.aluno.findUnique({
+            where: { id: id },
+        })
+    }
+
+    async findByIds(id: bigint[]) {
+        return await this.prisma.aluno.findMany({
+            where: { id: { in: id } },
+        })
+    }
+
 }

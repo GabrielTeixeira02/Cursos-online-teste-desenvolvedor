@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Headers, Param, Patch, Post, UseGuards }
 import { CursoService } from './curso.service';
 import { CursoInput } from './model/curso-input';
 import { Auth } from 'src/auth/auth';
+import { CursoAcessoInput } from './model/curso-acesso-input';
 
 @Controller('curso')
 export class CursoController {
@@ -30,6 +31,18 @@ export class CursoController {
     @Get('findAll')
     findAll(@Headers() headers) {
         return this.cursoService.findAllCursos(headers['user-token']);
+    }
+
+    @UseGuards(Auth)
+    @Post('acesso')
+    darAcessoCurso(@Headers() headers, @Body() input: CursoAcessoInput) {
+        return this.cursoService.acessoCurso(input, headers['user-token']);
+    }
+
+    @UseGuards(Auth)
+    @Get('find/alunos-cadastrados/:idCurso')
+    findAlunosCadastrados(@Headers() headers, @Param('idCurso') idCurso: bigint) {
+        return this.cursoService.findAlunosCadastrados(headers['user-token'], idCurso);
     }
 
 }

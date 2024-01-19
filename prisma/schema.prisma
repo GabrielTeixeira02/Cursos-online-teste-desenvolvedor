@@ -35,7 +35,7 @@ model Aluno {
   tipoUsuario        TipoUsuario         @default(ALUNO)
   cursosMatriculados Curso[]
   aulasVisualizadas  AulasVisualizadas[]
-  UsuariosCursos     UsuariosCursos[]
+  AlunoCurso         AlunoCurso[]
 }
 
 enum TipoUsuario {
@@ -44,20 +44,20 @@ enum TipoUsuario {
 }
 
 model Curso {
-  id             BigInt           @id @default(autoincrement())
-  nome           String
-  descricao      String?
-  banner         String?
-  professor      Professor        @relation(fields: [idProfessor], references: [id])
-  idProfessor    BigInt           @map("idProfessor")
-  aulas          Aula[]
-  alunos         Aluno[]
-  UsuariosCursos UsuariosCursos[]
+  id          BigInt       @id @default(autoincrement())
+  nome        String
+  descricao   String?
+  banner      String?
+  professor   Professor    @relation(fields: [idProfessor], references: [id])
+  idProfessor BigInt       @map("idProfessor")
+  aulas       Aula[]
+  alunos      Aluno[]
+  AlunoCurso  AlunoCurso[]
 }
 
 model Aula {
   id                BigInt              @id @default(autoincrement())
-  tipo              String
+  link              String?
   conteudo          String?
   arquivo           String?
   curso             Curso               @relation(fields: [idCurso], references: [id])
@@ -65,15 +65,22 @@ model Aula {
   AulasVisualizadas AulasVisualizadas[]
 }
 
-model UsuariosCursos {
-  status             String
-  aulas_visualizadas BigInt @default(0)
-  aluno              Aluno  @relation(fields: [idAluno], references: [id])
-  curso              Curso  @relation(fields: [idCurso], references: [id])
-  idAluno            BigInt @map("idAluno")
-  idCurso            BigInt @map("idCurso")
+model AlunoCurso {
+  status             StatusCurso @default(NAO_INICIADO)
+  aulas_visualizadas BigInt      @default(0)
+  aluno              Aluno       @relation(fields: [idAluno], references: [id])
+  curso              Curso       @relation(fields: [idCurso], references: [id])
+  idAluno            BigInt      @map("idAluno")
+  idCurso            BigInt      @map("idCurso")
 
   @@id([idAluno, idCurso])
+}
+
+enum StatusCurso {
+  NAO_INICIADO
+  EM_ANDAMENTO
+  FINALIZADO
+  APROVADO
 }
 
 model AulasVisualizadas {

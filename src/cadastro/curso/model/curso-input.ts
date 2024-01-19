@@ -16,4 +16,5 @@ export class CursoInput {
     @IsNumber({}, { message: "O id do professor ministrante é necessário." })
     @Type(() => Number)
     idProfessor: bigint;
+
 }

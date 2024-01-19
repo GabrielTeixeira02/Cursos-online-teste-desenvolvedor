@@ -7,12 +7,15 @@ import { AlunoModule } from './cadastro/aluno/aluno.module';
 import { CursoController } from './cadastro/curso/curso.controller';
 import { CursoModule } from './cadastro/curso/curso.module';
 import { UsuarioModule } from './cadastro/usuario/usuario.module';
+import { AulaService } from './cadastro/aula/aula.service';
+import { AulaModule } from './cadastro/aula/aula.module';
 
 @Module({
-  imports: [ProfessorModule, AlunoModule, CursoModule, UsuarioModule],
+  imports: [ProfessorModule, AlunoModule, CursoModule, UsuarioModule, AulaModule],
   controllers: [AppController, AlunoController, CursoController],
   providers: [
-    AppService
+    AppService,
+    AulaService
   ],
 })
 export class AppModule { }
