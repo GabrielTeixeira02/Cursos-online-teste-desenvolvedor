@@ -24,16 +24,35 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Sistema para cadastramento de cursos online.
 
 ## Installation
+Qualquer dúvida me contate no email: teixeiradeoliveira02.gabriel@gmail.com <br />
+<br />
+Sistema foi criando em um ambiente Linux. <br />
+Passos de instalação para sistemas Linux. <br />
 
+### Node
 ```bash
 Node version v20.11.0
 ```
 
 ```bash
 $ npm install
+```
+
+### PostgreSQL
+O projeto foi feito usando o banco de dados PostgreSQL.
+```bash
+# Primeiro
+Configure um banco de dados no PostgreSQL. O nome padrão do banco no sistema é 'cursos-online', mas caso queira mudar vá em *.env* e altera a seguinte variável de ambiente:
+DATABASE_URL="postgresql://{usuario-do-banco}:{senha-do-banco}@localhost:5432/{nome-do-banco}?schema=public"
+
+# Segundo
+$ npx prisma generate
+
+# Terceiro
+$ npx prisma migrate dev --name init
 ```
 
 ## Running the app
@@ -171,7 +190,7 @@ Body: "aulas": [
         }
     ]
 
-# Visualizar uma aula
+# Aluno visualizar uma aula
 Path: http://localhost:8090/visualizar-aula/{idAula}
 Método: PATCH
 Body: Não necessário, o usuário é pego pelo token.
