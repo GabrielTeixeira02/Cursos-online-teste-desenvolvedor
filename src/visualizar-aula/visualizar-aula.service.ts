@@ -3,6 +3,8 @@ import { VisualizarAulaInput } from './model/visualizar-aula-input';
 import { VisualizarAulaRepository } from './repository/visualizar-aula.repository';
 import { VisualizarAulaValidations } from './validations/visualizar-aula-validations';
 import { UsuarioService } from 'src/cadastro/usuario/usuario.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { AlteraStatusEvent } from 'src/cadastro/curso/model/altera-status-event';
 
 @Injectable()
 export class VisualizarAulaService {
@@ -11,6 +13,7 @@ export class VisualizarAulaService {
         private readonly visualizarRepository: VisualizarAulaRepository,
         private readonly visualizarValidations: VisualizarAulaValidations,
         private readonly usuarioService: UsuarioService,
+        private eventEmitter: EventEmitter2
     ) { }
 
 
@@ -18,11 +21,15 @@ export class VisualizarAulaService {
         const user = await this.usuarioService.findByNomeUsuario(usuarioAtivo);
         const input = new VisualizarAulaInput(user.id, aulaId);
         await this.visualizarValidations.validateVisualizarAula(input, usuarioAtivo);
-        return await this.visualizarRepository.visualizaAula(input);
+        const aulaVisualizada = await this.visualizarRepository.visualizaAula(input);
+
+        this.eventEmitter.emit('alteraStatus', new AlteraStatusEvent(user.id, aulaId));
+
+        return aulaVisualizada;
     }
 
-    async findByAulas(idsAulas: bigint[]) {
-        const aula = await this.visualizarRepository.findByCurso(idsAulas);
+    async findByAulasAndAluno(idsAulas: bigint[], idAluno: bigint) {
+        const aula = await this.visualizarRepository.findByAulaAndAluno(idsAulas, idAluno);
         if (aula) {
             return aula;
         }

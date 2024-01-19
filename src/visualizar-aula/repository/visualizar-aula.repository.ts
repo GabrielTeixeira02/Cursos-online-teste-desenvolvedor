@@ -11,9 +11,12 @@ export class VisualizarAulaRepository {
         return await this.prisma.aulasVisualizadas.create({ data: input });
     }
 
-    async findByCurso(idAula: bigint[]) {
+    async findByAulaAndAluno(idAula: bigint[], idAluno: bigint) {
         return await this.prisma.aulasVisualizadas.findMany({
-            where: { idAula: { in: idAula } },
+            where: {
+                idAula: { in: idAula },
+                idAluno: idAluno
+            },
         })
     }
 

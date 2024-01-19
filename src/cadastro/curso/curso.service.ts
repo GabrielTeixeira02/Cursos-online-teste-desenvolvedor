@@ -10,6 +10,10 @@ import { AlunoCursoOutput } from './model/aluno-curso-output';
 import { AulaService } from '../aula/aula.service';
 import { VisualizarAulaService } from 'src/visualizar-aula/visualizar-aula.service';
 import { StatusCurso } from '@prisma/client';
+import { OnEvent } from '@nestjs/event-emitter';
+import { AlteraStatusEvent } from './model/altera-status-event';
+import { CursoAcessoUpdateInput } from './model/curso-acesso-update-input';
+import { Ids } from './model/ids';
 
 @Injectable()
 export class CursoService {
@@ -61,6 +65,27 @@ export class CursoService {
             cursoOutput.alunos.push(new AlunoCursoOutput(nomeAluno, a.status.toLocaleLowerCase()));
         })
         return cursoOutput;
+    }
+
+    @OnEvent('alteraStatus')
+    async alteraStatus(payload: AlteraStatusEvent) {
+        const cursoId = (await this.aulaService.findById(payload.idAula)).idCurso;
+        const status = await this.getStatusCurso(cursoId, payload.idAluno);
+        await this.alunoCursoRepository.atualiza(new CursoAcessoUpdateInput(status), new Ids(cursoId, payload.idAluno));
+    }
+
+    private async getStatusCurso(idCurso: bigint, idAluno: bigint) {
+        const aulas = (await this.aulaService.findByCurso(idCurso)).map(c => c.id);
+        const aulasVisualizadas = await this.visualizaAula.findByAulasAndAluno(aulas, idAluno);
+        if (aulas.length === aulasVisualizadas.length) {
+            return StatusCurso.FINALIZADO;
+        }
+        if (aulasVisualizadas.length === 0) {
+            return StatusCurso.NAO_INICIADO;
+        }
+        if (aulasVisualizadas.length != 0 && aulas.length > aulasVisualizadas.length) {
+            return StatusCurso.EM_ANDAMENTO;
+        }
     }
 
 }
