@@ -10,7 +10,7 @@ export class AulaController {
 
     @UseGuards(Auth)
     @Post()
-    createCurso(@Headers() headers, @Body() input: AulasInput) {
+    createAula(@Headers() headers, @Body() input: AulasInput) {
         return this.aulaService.create(input, headers['user-token']);
     }
 }

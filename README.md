@@ -47,7 +47,7 @@ $ npm run start:prod
 
 ## Test
 
-Para a criação desse projeto foi necessario aprender Prisma e NestJS, por conta disso acabei usando de 3 a 4 dias para aprender ambos os Frameworks. Portanto, acabou faltando tempo para fazer os testes unitários.
+Para a criação desse projeto foi necessário que eu aprendesse Prisma e NestJS, por conta disso acabei usando de 3 a 4 dias quase que exclusivamente para aprender ambos os Frameworks. Portanto, acabou faltando tempo para fazer os testes unitários.
 
 ```bash
 # unit tests
@@ -60,16 +60,110 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## API's para teste
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Uma boa parte do sistema está funcional, porém, como citado acima, não houve tempo suficiente para deselver todas as API's necessárias.
 
-## Stay in touch
+{port} = A porta padrão do sistema está definida para 8090, porém é possivel altera-lá no arquivo *main.ts*
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Professor
+```bash
+# Cadastro de professor
+Path: http://localhost:{port}/professor
+Método: POST
 
-## License
+# Listar todos os professores cadastrados
+Path: http://localhost:{port}/professor/findAll
+Método: GET
+```
 
-Nest is [MIT licensed](LICENSE).
+### Aluno
+```bash
+# Cadastro de alunos
+Path: http://localhost:{port}/aluno
+Método: POST
+Body: {
+    "nome": "string",
+    "nomeusuário": "string"
+}
+
+# Listar todos os alunos cadastrados
+Path: http://localhost:{port}/aluno/findAll
+Método: GET
+```
+
+### Cursos
+```bash
+# Criar curso
+Path: http://localhost:{port}/curso
+Método: POST
+header: Necessário passar um token de nome 'user-token' e o valor é o nome do usuário(Aluno ou Professor) cadastrado.
+Body: {
+    "nome": "string",
+    "descricao": "string",
+    "banner": "string",
+    "idProfessor": number
+}
+
+# Atualizar Curso
+Path: http://localhost:{port}/curso/{idCurso}
+Método: PATCH
+header: Necessário passar um token de nome 'user-token' e o valor é o nome do usuário(Aluno ou Professor) cadastrado.
+Body: {
+    "nome": "string",
+    "descricao": "string",
+    "banner": "string",
+    "idProfessor": number
+}
+
+# Deletar Curso
+Path: http://localhost:{port}/curso/{idCurso}
+Método: DELETE
+header: Necessário passar um token de nome 'user-token' e o valor é o nome do usuário(Aluno ou Professor) cadastrado.
+
+# Listar todos os cursos cadastrados
+Path: http://localhost:{port}/curso/findAll
+Método: GET
+header: Necessário passar um token de nome 'user-token' e o valor é o nome do usuário(Aluno ou Professor) cadastrado.
+
+# Dar acesso ao curso para um aluno
+Path: http://localhost:{port}/curso/acesso
+Método: POST
+header: Necessário passar um token de nome 'user-token' e o valor é o nome do usuário(Aluno ou Professor) cadastrado.
+Body: {
+    "idAluno": number,
+    "idCurso": number
+}
+
+# Listar alunos cadastrados em um curso
+Path: http://localhost:{port}/curso/find/alunos-cadastrados/{idCurso}
+Método: GET
+header: Necessário passar um token de nome 'user-token' e o valor é o nome do usuário(Aluno ou Professor) cadastrado.
+```
+
+### Aula
+```bash
+# Criar aulas e relacioná-las a um curso
+Path: http://localhost:{port}/aula
+Método: POST
+header: Necessário passar um token de nome 'user-token' e o valor é o nome do usuário(Aluno ou Professor) cadastrado.
+Body: "aulas": [
+        {
+            "link": "string",
+            "conteudo": "string",
+            "arquivo": "string",
+            "idCurso": number
+        },
+        {
+            "link": "string",
+            "conteudo": "string",
+            "arquivo": "string",
+            "idCurso": number
+        }
+    ]
+
+# Visualizar uma aula
+Path: http://localhost:8090/visualizar-aula/{idAula}
+Método: PATCH
+Body: Não necessário, o usuário é pego pelo token.
+```
