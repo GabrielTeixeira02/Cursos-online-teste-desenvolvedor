@@ -21,7 +21,6 @@ export class CursoService {
     constructor(private readonly cursoRepository: CursoRepository,
         private readonly validation: CursoValidation,
         private readonly alunoCursoRepository: AlunoCursoRepository,
-        private readonly alunoService: AlunoService,
         private readonly aulaService: AulaService,
         private readonly visualizaAula: VisualizarAulaService
     ) { }
@@ -42,7 +41,7 @@ export class CursoService {
     }
 
     async findAllCursos(usuarioAtivo: string) {
-        await this.validation.validatePermissaoUsuario(usuarioAtivo)
+        await this.validation.validatePermissaoUsuario(usuarioAtivo);
         return await this.cursoRepository.findAll();
     }
 
@@ -54,17 +53,8 @@ export class CursoService {
     async findAlunosCadastrados(usuarioAtivo: string, idCurso: bigint) {
         await this.validation.validatePermissaoUsuario(usuarioAtivo)
 
-        let cursoOutput: CursoOutput = new CursoOutput();
-        const alunoCurso = await this.alunoCursoRepository.findAlunosCadastrados(idCurso);
-        const alunosIdsList = alunoCurso.map(alunoCurso => alunoCurso.idAluno);
-        const alunos = await this.alunoService.findByIds(alunosIdsList);
-        cursoOutput.nomeCurso = (await this.cursoRepository.findById(idCurso)).nome;
-
-        alunoCurso.forEach(a => {
-            const nomeAluno = alunos.get(a.idAluno).toString();
-            cursoOutput.alunos.push(new AlunoCursoOutput(nomeAluno, a.status.toLocaleLowerCase()));
-        })
-        return cursoOutput;
+        const curso = await this.cursoRepository.findAlunosCadastradosById(idCurso);
+        return new CursoOutput(curso);
     }
 
     @OnEvent('alteraStatus')

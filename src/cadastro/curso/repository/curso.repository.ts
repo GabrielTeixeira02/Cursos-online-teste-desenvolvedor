@@ -4,6 +4,7 @@ import { CursoInput } from "../model/curso-input";
 
 @Injectable()
 export class CursoRepository {
+
     constructor(private readonly prisma: PrismaService) { }
 
     async create(input: CursoInput) {
@@ -24,7 +25,36 @@ export class CursoRepository {
         })
     }
 
+    async findAlunosCadastradosById(id: bigint) {
+        return await this.prisma.curso.findUnique({
+            where: { id: id },
+            select: {
+                nome: true,
+                AlunoCurso: {
+                    select: {
+                        aluno: true,
+                        status: true
+                    }
+                }
+            }
+        })
+    }
+
     async findAll() {
-        return await this.prisma.curso.findMany();
+        return await this.prisma.curso.findMany({
+            select: {
+                id: true,
+                nome: true,
+                descricao: true,
+                banner: true,
+                professor: true,
+                aulas: true,
+                AlunoCurso: {
+                    select: {
+                        aluno: true
+                    }
+                }
+            },
+        });
     }
 }
